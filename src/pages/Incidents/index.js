@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { View, FlatList, Text, Image, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { View, FlatList, Text, Image, TouchableOpacity } from 'react-native';
 
-import logo from "../../assets/logo.png";
+import logo from '../../assets/logo.png';
 
-import styles from "./styles";
-import api from "../../service/api";
+import styles from './styles';
+import api from '../../service/api';
 
 export default function Incidents() {
   const navigation = useNavigation();
@@ -16,25 +17,25 @@ export default function Incidents() {
   const [loading, setLoading] = useState(false);
 
   function navigateToDetail(incident) {
-    navigation.navigate("Detail", { incident });
+    navigation.navigate('Detail', { incident });
   }
-
+  // npm i -S @expo/vector-icons'
   async function loadIncidents() {
     if (loading) return;
 
     if (total > 0 && incidents.length === total) return;
 
-    else setLoading(true);
+    setLoading(true);
 
-    const response = await api.get("/incidents", {
-     params:{
-      page
-     }
+    const response = await api.get('/incidents', {
+      params: {
+        page,
+      },
     });
 
     setIncidents([...incidents, ...response.data]);
     setPage(page + 1);
-    setTotal(response.headers["x-total-count"]);
+    setTotal(response.headers['x-total-count']);
     setLoading(false);
   }
   useEffect(() => {
@@ -46,21 +47,24 @@ export default function Incidents() {
       <View style={styles.header}>
         <Image source={logo} />
         <Text style={styles.headerText}>
-          Total de <Text style={styles.headerTextBold}>{total} casos </Text>
+          Total de
+          <Text style={styles.headerTextBold}>
+            {total}
+            casos
+          </Text>
         </Text>
       </View>
       <Text style={styles.title}>Bem vindo!</Text>
       <Text styles={styles.description}>
-        Escolha um dos casos abaixo e salve o dia{" "}
+        Escolha um dos casos abaixo e salve o dia
       </Text>
       <FlatList
         data={incidents}
         style={styles.incidentList}
-        keyExtractor={incident => String(incident.id)}
+        keyExtractor={(incident) => String(incident.id)}
         showsVerticalScrollIndicator={false}
         onEndReached={loadIncidents}
         onEndReachedThreshold={0.2}
-        
         renderItem={({ item: incident }) => (
           <View style={styles.incident}>
             <Text style={styles.incidentProperty}>ONG:</Text>
@@ -71,9 +75,9 @@ export default function Incidents() {
 
             <Text style={styles.incidentProperty}>Valor:</Text>
             <Text style={styles.incidentValue}>
-              {Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL"
+              {Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
               }).format(incident.value)}
             </Text>
 
